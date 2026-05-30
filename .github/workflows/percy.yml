@@ -1,0 +1,89 @@
+name: Percy Visual Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Optional PR number to comment the Percy build link on"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  percy:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Percy tests
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          set -o pipefail
+          npx percy exec -- npx playwright test 2>&1 | tee percy-output.log
+
+      - name: Extract Percy Build URL
+        id: percy-url
+        if: always()
+        run: |
+          PERCY_URL=$(grep -Eo 'https://percy\.io/[^[:space:]]+' percy-output.log | tail -n 1 || true)
+
+          echo "url=$PERCY_URL" >> "$GITHUB_OUTPUT"
+
+          if [ -n "$PERCY_URL" ]; then
+            echo "Found Percy URL: $PERCY_URL"
+          else
+            echo "No Percy URL found in output."
+          fi
+
+      - name: Add Percy Link to GitHub Actions Summary
+        if: always()
+        run: |
+          echo "## Percy Visual Regression Build" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -n "${{ steps.percy-url.outputs.url }}" ]; then
+            echo "[View Percy Build](${{ steps.percy-url.outputs.url }})" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No Percy build URL was found in the test output." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Comment Percy link on pull request
+        if: always() && inputs.pr_number != '' && steps.percy-url.outputs.url != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const percyUrl = '${{ steps.percy-url.outputs.url }}';
+            const prNumber = Number('${{ inputs.pr_number }}');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `## Percy Visual Regression Build\n\n[View Percy Build](${percyUrl})`
+            });
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: percy-playwright-report
+          path: playwright-report/
+          retention-days: 30

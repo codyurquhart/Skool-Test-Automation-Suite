@@ -1,0 +1,23 @@
+{
+  "name": "playwright-percy-qa-template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reusable Playwright Test + Percy visual regression template for QA automation",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "percy": "percy exec -- playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@percy/cli": "^1.30.9",
+    "@percy/playwright": "^1.0.9",
+    "@playwright/test": "^1.49.0",
+    "dotenv": "^16.6.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
