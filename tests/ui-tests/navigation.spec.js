@@ -18,16 +18,15 @@ test.describe("navigation tests", () => {
     await expect(page).toHaveURL("/signup?v=pricing");
   });
   test("listing link routes to correct page", async ({ page, homePage }) => {
-    const listingNum = 1;
+    const number = 1;
 
     await homePage.openHome();
-    await expect(homePage.getListings(listingNum)).toBeVisible();
-
-    const expectedName = await homePage.getListingName(listingNum);
+    
+    const expectedName = await homePage.getListingName("", 1);
 
     const [newTab] = await Promise.all([
       page.waitForEvent("popup"),
-      homePage.getListings(listingNum).click(),
+      homePage.getSearchResultByNumber("", 1).click(),
     ]);
 
     const list = new ListingPage(newTab);

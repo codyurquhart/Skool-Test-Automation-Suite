@@ -3,23 +3,23 @@ const BasePage = require("../pages/BasePage");
 const LoginPage = require("../pages/LoginPage");
 
 class HomePage extends BasePage {
-  /**
-   * @param {import('@playwright/test').Page} page
-   */
   constructor(page) {
     super(page);
 
-    //logged out state
-    this.loginBtn = page.getByRole("button", { name: /log in/i }).nth(0);
-    //---------------------//
+    this.loginPopup = page
+      .locator('[class*="styled__ModalWrapper"]')
+      .filter({ hasText: /log in to skool/i });
+
+    const loginModal = this.loginPopup;
+    this.popupEmail = page.locator('input[type="email"]');
+    this.popupPassword = page.locator('input[type="password"]');
+    this.popupLoginBtn = loginModal.getByRole("button", {
+      name: /^log in$/i,
+    });
 
     this.logoutPopUp = page.locator(".styled__ModalWrapper-sc-7eym6d-0");
 
     this.incorrectPassword = page.locator(".styled__InputError-sc-1saiqqb-6");
-
-    this.allListings = page.locator(
-      'div[class*="DiscoveryCards"] > a[class*="ChildrenLink"]',
-    );
 
     this.searchBar = page.getByPlaceholder(/search/i);
 
@@ -36,29 +36,47 @@ class HomePage extends BasePage {
   async navigateToLogin() {
     await this.openHome();
     await expect(this.loginBtn).toBeVisible();
-    await this.loginBtn.click();
+    await this.header.loginBtn.click();
   }
 
-  async popupLogin() {
-    await this.openHome();
-    await expect(this.loginBtn).toBeVisible();
-    await expect(this.loginBtn).toBeEnabled();
-    await this.loginBtn.click();
-    await expect(this.page.locator("#email")).toBeVisible({ timeout: 10000 });
+  async login() {
+    await this.popupEmail.fill(process.env.USER_EMAIL);
+    await this.popupPassword.fill(process.env.USER_PASSWORD);
+    await this.popupLoginBtn.click();
   }
 
-  getListingPayStatus(num) {
-    return this.getListings(num).locator(
-      'div[class*="styled__DiscoveryCardMeta"]',
+  async openPopupLogin() {
+    await this.page.waitForLoadState("domcontentloaded");
+    await this.page.waitForTimeout(1000);
+    await expect(this.header.loginBtn).toBeVisible();
+    await expect(this.header.loginBtn).toBeEnabled();
+    await this.header.loginBtn.click();
+
+    await expect(this.loginPopup).toBeVisible();
+    await expect(this.popupEmail).toBeVisible();
+  }
+
+  getListingPayStatus(searchTerm, number = 1) {
+    return this.getSearchResultByNumber(searchTerm, number).locator(
+      'div[class*="DiscoveryCardMeta"]',
     );
   }
 
-  getListings(num) {
-    return this.allListings.nth(num - 1);
+  getSearchResultByNumber(searchTerm = "", number = 1) {
+    return this.page
+      .locator('div[class*="DiscoveryCards"]')
+      .getByRole("link", { name: new RegExp(searchTerm, "i") })
+      .nth(number - 1);
   }
 
-  getListingName(num) {
-    return this.getListings(num)
+  getListingByName(searchTerm) {
+    return this.page.getByRole("link", {
+      name: new RegExp(searchTerm, "i"),
+    });
+  }
+
+  getListingName(searchTerm = "", number = 1) {
+    return this.getSearchResultByNumber(searchTerm, number)
       .locator('span[class*="GroupNameWrapper"]')
       .innerText();
   }

@@ -10,7 +10,7 @@ test.describe("Visual regression @percy", () => {
   test("Home page logged in @percy", async ({
     page,
     homePage,
-    _login,
+    _apiLogin,
   }, testInfo) => {
     await homePage.openHome();
     await percySnapshot(page, `Home Page - ${testInfo.project.name}`);
@@ -18,7 +18,7 @@ test.describe("Visual regression @percy", () => {
   test("Signup page logged in @percy", async ({
     page,
     homePage,
-    _login,
+    _apiLogin,
   }, testInfo) => {
     await homePage.openHome();
     await page.goto("/signup");
@@ -27,7 +27,7 @@ test.describe("Visual regression @percy", () => {
   test("Pricing page logged in @percy", async ({
     page,
     homePage,
-    _login,
+    _apiLogin,
   }, testInfo) => {
     await homePage.openHome();
     await page.goto("/signup?v=pricing");
@@ -38,7 +38,7 @@ test.describe("Visual regression @percy", () => {
     test("Home page logged in @percy @mobile", async ({
       page,
       homePage,
-      _login,
+      _apiLogin,
     }, testInfo) => {
       await homePage.openHome();
       await percySnapshot(page, `Home Page - ${testInfo.project.name}`);
@@ -53,7 +53,7 @@ test.describe("Visual regression @percy", () => {
     test("@mobile Signup page logged in @percy", async ({
       page,
       homePage,
-      _login,
+      _apiLogin,
     }, testInfo) => {
       await homePage.openHome();
       await page.goto("/signup");
@@ -62,7 +62,7 @@ test.describe("Visual regression @percy", () => {
     test("@mobile Pricing page logged in @percy", async ({
       page,
       homePage,
-      _login,
+      _apiLogin,
     }, testInfo) => {
       await homePage.openHome();
       await page.goto("/signup?v=pricing");

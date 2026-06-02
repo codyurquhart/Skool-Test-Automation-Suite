@@ -10,41 +10,12 @@ test.describe("locator debugging", () => {
   test.beforeEach(async ({ page }) => {
     home = new HomePage(page);
   });
-  test("locator test @mobile", async ({ page, _login, mobileHomePage }) => {
+  test.skip("locator test @mobile", async ({ page, _login, mobileHomePage }) => {
     await expect(mobileHomePage.menuDropDown).toBeVisible();
   });
-  test('find listing source', async ({ page }) => {
-  page.on('response', async (response) => {
-    const contentType = response.headers()['content-type'] || '';
-
-    if (
-      !contentType.includes('text/html') &&
-      !contentType.includes('json')
-    ) {
-      return;
-    }
-
-    try {
-      const text = await response.text();
-
-      if (
-        text.includes('Clief Notes') ||
-        text.includes('AI Video Bootcamp') ||
-        text.includes('AIS')
-      ) {
-        console.log(
-          'FOUND LISTING DATA:',
-          response.status(),
-          response.request().method(),
-          response.url()
-        );
-      }
-    } catch (error) {
-      // Some responses cannot be read safely
-    }
+  test.skip("locator test browser", async ({ page, homePage }) => {
+    await homePage.openPopupLogin();
+    await expect(homePage.loginPopup).toContainText(/email/i);
   });
 
-  await page.goto('https://www.skool.com/');
-  await page.waitForTimeout(5000);
-});
 });

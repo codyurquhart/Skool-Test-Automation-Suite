@@ -19,7 +19,7 @@ class BasePage {
 
     const url = new URL(path, baseUrl).toString();
 
-    await this.page.goto(url);
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
 
     return this.page.url();
   }

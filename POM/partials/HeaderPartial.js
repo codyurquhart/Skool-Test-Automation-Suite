@@ -4,9 +4,11 @@ class HeaderPartial {
   constructor(page) {
     this.page = page;
 
-    this.headerLayout = page.locator('[class*="styled__LayoutNav"]');
+    this.headerLayout = page.locator('[class*="styled__NavContainer-sc-vae51c-2"]');
 
     this.logo = this.headerLayout.locator('a[href="/"]');
+
+    this.loginBtn = this.headerLayout.getByRole('button', { name: /log in/i }).first();
 
     this.userMenu = this.headerLayout.locator('img[src]');
     this.userMenuDropDown = page.locator('.styled__DropdownBackground-sc-1c1jt59-11');
