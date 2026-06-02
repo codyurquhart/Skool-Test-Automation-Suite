@@ -10,8 +10,14 @@ test.describe("basic api tests", () => {
       process.env.USER_PASSWORD,
     );
 
-    console.log(loginData.status());
-    console.log(await loginData.text());
+    const body = await loginData.text();
+
+    console.log("BASE_URL exists:", !!process.env.BASE_URL);
+    console.log("EMAIL exists:", !!process.env.EMAIL);
+    console.log("PASSWORD exists:", !!process.env.PASSWORD);
+    console.log("Final URL:", loginData.url());
+    console.log("Status:", loginData.status());
+    console.log("Body:", body);
 
     expect(loginData.status()).toBe(200);
 
