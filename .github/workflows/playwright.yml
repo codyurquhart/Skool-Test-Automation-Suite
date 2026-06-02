@@ -28,6 +28,9 @@ jobs:
         env:
           # CUSTOMIZE: add repository variable BASE_URL, or change the default URL below
           BASE_URL: ${{ vars.BASE_URL || 'https://example.com' }}
+          API_BASE_URL: ${{secrets.API_BASE_URL}}
+          USER_EMAIL: ${{secrets.USER_EMAIL}}
+          USER_PASSWORD: ${{secrets.USER_PASSWORD}}
         run: npx playwright test --grep-invert "@percy"
 
       - name: Upload Playwright HTML report
