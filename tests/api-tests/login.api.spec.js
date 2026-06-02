@@ -10,6 +10,9 @@ test.describe("basic api tests", () => {
       process.env.USER_PASSWORD,
     );
 
+    console.log(loginData.status());
+    console.log(await loginData.text());
+
     expect(loginData.status()).toBe(200);
 
     const setCookie = loginData.headers()["set-cookie"];
@@ -18,7 +21,8 @@ test.describe("basic api tests", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test("protected API rejects request without token", async ({ request }) => {
-    const requestUrl ="https://api2.skool.com/self/notifications?limit=30&type=all"
+    const requestUrl =
+      "https://api2.skool.com/self/notifications?limit=30&type=all";
     const response = await request.get(requestUrl);
     expect([401, 403]).toContain(response.status());
   });

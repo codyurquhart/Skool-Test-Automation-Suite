@@ -8,7 +8,7 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
-    "percy": "percy exec -- playwright test",
+    "percy": "percy exec -- playwright test --config=playwright.percy.config.js --grep @percy",
     "report": "playwright show-report"
   },
   "devDependencies": {
