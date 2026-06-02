@@ -14,7 +14,7 @@ class LoginApi {
       },
     });
 
-    if (!response.ok) {
+    if (!response.ok()) {
       throw new Error(`Login failed with status ${response.status}`);
     }
 
