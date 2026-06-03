@@ -36,10 +36,6 @@ jobs:
       - name: Clear Playwright browser cache
         run: rm -rf ~/.cache/ms-playwright
 
-      - name: Install Playwright Chromium
-        run: DEBUG=pw:install npx playwright install chromium --force
-        timeout-minutes: 10
-
       - name: Run Percy tests
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
