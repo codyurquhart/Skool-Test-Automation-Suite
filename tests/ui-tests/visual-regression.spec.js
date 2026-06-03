@@ -1,5 +1,5 @@
 const { test, expect } = require("../../fixtures/pages.fixture");
-const { percySnapshot } = require("@percy/playwright");
+const percySnapshot = require("@percy/playwright");
 const HomePage = require("../../POM/pages/HomePage");
 
 test.describe("Visual regression @percy", () => {

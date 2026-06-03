@@ -15,8 +15,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -51,8 +51,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -63,8 +63,12 @@ jobs:
       - name: Run Percy + Playwright
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          BASE_URL: ${{ vars.BASE_URL || 'https://example.com' }}
-        run: npm run percy -- --grep "@percy"
+          BASE_URL: ${{ secrets.BASE_URL }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+        run: npm run percy
 
       - name: Upload Playwright HTML report (Percy job)
         if: always()
