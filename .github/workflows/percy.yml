@@ -36,6 +36,11 @@ jobs:
       - name: Clear Playwright browser cache
         run: rm -rf ~/.cache/ms-playwright
 
+      - name: Set Percy browser executable
+        shell: bash
+        run: |
+          echo "PERCY_BROWSER_EXECUTABLE=$(find /ms-playwright -path '*/chrome-linux/chrome' -type f | head -n 1)" >> $GITHUB_ENV
+
       - name: Run Percy tests
         shell: bash
         env:
