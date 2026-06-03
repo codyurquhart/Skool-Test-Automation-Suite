@@ -18,6 +18,8 @@ jobs:
     name: Percy visual tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
 
     steps:
       - name: Checkout repo
