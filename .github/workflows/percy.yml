@@ -37,6 +37,7 @@ jobs:
         run: rm -rf ~/.cache/ms-playwright
 
       - name: Run Percy tests
+        shell: bash
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           BASE_URL: ${{ secrets.BASE_URL }}
