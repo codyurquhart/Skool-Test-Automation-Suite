@@ -6,6 +6,7 @@ test.describe('Visual regression "logged out"', () => {
   test("Home page logged out @percy", async ({ page, homePage }, testInfo) => {
     await homePage.openHome();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(1000);
     await percySnapshot(page, `Home Page logged out - ${testInfo.project.name}`);
   });
 });
