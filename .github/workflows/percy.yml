@@ -32,21 +32,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-         path: ~/.cache/ms-playwright
-         key: ${{ runner.os }}-ms-playwright-${{ hashFiles('package-lock.json') }}
-         restore-keys: |
-          ${{ runner.os }}-ms-playwright-
-
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Set Percy browser executable
+      - name: Use system Chrome for Percy
         shell: bash
         run: |
-          echo "PERCY_BROWSER_EXECUTABLE=$(node -e 'const { chromium } = require("playwright"); console.log(chromium.executablePath())')" >> "$GITHUB_ENV"
+          google-chrome --version
+          CHROME_PATH=$(which google-chrome)
+          echo "PERCY_BROWSER_EXECUTABLE=$CHROME_PATH" >> "$GITHUB_ENV"
+          echo "Using Chrome at: $CHROME_PATH"
 
       - name: Prepare auth folder
         run: mkdir -p playwright/.auth
