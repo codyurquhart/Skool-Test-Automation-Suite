@@ -48,7 +48,7 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-        run: npx playwright test tests/auth-setup.spec.js --config=playwright.percy.config.js
+        run: npx playwright test tests/auth-setup.spec.js --config=playwright.percy.config.js --project="Desktop Chrome"
 
       - name: Run Percy tests
         shell: bash

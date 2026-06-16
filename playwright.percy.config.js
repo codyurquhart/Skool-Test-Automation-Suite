@@ -9,7 +9,7 @@ module.exports = defineConfig({
     baseURL: process.env.BASE_URL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    video: off,
     actionTimeout: 15_000,
     navigationTimeout: 30_000,
   },
